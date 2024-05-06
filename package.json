@@ -1,14 +1,18 @@
 {
-  "name": "devbills",
+  "name": "devbills-api",
   "version": "1.0.0",
-  "description": "Devbills",
+  "description": "Devbills API - Controle a sua vida financeira pessoal de forma rapida e fácil",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch ./src/server.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Alex Rangel",
+    "email": "alexrangel@gmail.com",
+    "url": "https://github.com/alex-rangel"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
