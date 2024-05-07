@@ -1,7 +1,9 @@
 import { Router } from "express";
 
-import { baseRouter } from "./base.routes";
+import { baseRouter } from "./base.route";
+import { categoriesRoutes } from "./categories.route";
 
 export const routes = Router();
 
-routes.get('/', baseRouter);
+routes.use('/', baseRouter);
+routes.use('/categories', categoriesRoutes)
