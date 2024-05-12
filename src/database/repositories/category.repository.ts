@@ -9,4 +9,10 @@ export class CategoryRepository {
 
         return createdCategory.toObject<Category>()
     }
+
+    async findByTitle(title:string): Promise<Category | undefined> {
+        const category = await this.model.findOne({ title })
+
+        return category?. toObject<Category>()
+    }
 }
