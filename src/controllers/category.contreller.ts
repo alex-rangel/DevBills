@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from "express";
+import { z } from 'zod'
 
 import { CategoryRepository } from "../database/repositories/category.repository";
 import { CategoryModel } from "../database/schemas/category.schema";
 import { CategoriesService } from "../services/category.sevice";
-import { createdCategoryDto } from "../dtos/categories.dto";
+import { createCategoryDTO } from "../dtos/categories.dto";
+import { StatusCodes } from "http-status-codes";
 
 export class CategoriesControllers {
     async create(
-        req: Request<unknown, unknown, createdCategoryDto>, 
+        req: Request<unknown, unknown, createCategoryDTO>, 
         res: Response,
         next: NextFunction,
     ) {
@@ -20,7 +22,7 @@ export class CategoriesControllers {
 
             const result = await service.create({ title, color })
 
-            return res.status(201).json(result)
+            return res.status(StatusCodes.CREATED).json(result)
         
         } catch (error) {
             next(error)
