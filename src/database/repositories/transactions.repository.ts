@@ -1,11 +1,10 @@
-import { createTransactionDTO } from "../../dtos/transactions.dto";
 import { Transaction } from "../../entities/transaction.entity";
 import { TransactionModel } from "../schemas/transactions.schema"; 
 
 export class TransactionsRepository {
     constructor(private model: typeof TransactionModel) {}
 
-    async  create({}: createTransactionDTO): Promise<Transaction> {
+    async  create({title, date, amount, type, category}: Transaction): Promise<Transaction> {
         const createdTransaction = await this.model.create({});
 
         return createdTransaction.toObject<Transaction>()
