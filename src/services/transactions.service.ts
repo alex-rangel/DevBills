@@ -5,7 +5,7 @@ import { Transaction } from "../entities/transaction.entity";
 import { AppError } from "../errors/app.error";
 import { StatusCodes } from "http-status-codes";
 
-export class TranctionsServica {
+export class TransactionsService {
     constructor(
         private transactionsRepository: TransactionsRepository,
         private categoriesRepository: CategoryRepository,

@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 import { CategorySchema } from "./category.schema";
-import { string } from "zod";
 
 export const TransactionSchema = new mongoose.Schema(
     {
