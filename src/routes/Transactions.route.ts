@@ -10,6 +10,9 @@ export const transactionsRoutes = Router()
 
 const controller = new TransactionsControllers(TransactionsFactory.getServiceInstance())
 
+transactionsRoutes.get('/', controller.index)
+
 transactionsRoutes.post('/', validator({ schema: createTransactionsSchema, type: ParamsType.BODY
  }), controller.create )
+
 
