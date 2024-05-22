@@ -1,11 +1,12 @@
-import { indexTransactionsDTO } from "../../dtos/transactions.dto";
+import { getDashboardDTO, indexTransactionsDTO } from "../../dtos/transactions.dto";
+import { Balance } from "../../entities/balance.entity";
 import { Transaction } from "../../entities/transaction.entity";
-import { TransactionModel } from "../schemas/transactions.schema"; 
+import { TransactionModel } from "../schemas/transactions.schema";
 
 export class TransactionsRepository {
-    constructor(private model: typeof TransactionModel) {}
+    constructor(private model: typeof TransactionModel) { }
 
-    async  create({title, date, amount, type, category}: Transaction): Promise<Transaction> {
+    async create({ title, date, amount, type, category }: Transaction): Promise<Transaction> {
         const createdTransaction = await this.model.create({
             title,
             date,
@@ -18,24 +19,79 @@ export class TransactionsRepository {
     }
 
     async index({ title, categoryId, beginDate, endDate }: indexTransactionsDTO): Promise<Transaction[]> {
-        
+
         const whereParams: Record<string, unknown> = {
-            ...(title && { title: {$regex: title, $options: 'i'}}),
-            ...(categoryId && {'category._id': categoryId}),
+            ...(title && { title: { $regex: title, $options: 'i' } }),
+            ...(categoryId && { 'category._id': categoryId }),
         }
 
         if (beginDate || endDate) {
             whereParams.date = {
-                ...(beginDate && {$gte: beginDate}),
-                ...(endDate && {$lte: endDate}),
+                ...(beginDate && { $gte: beginDate }),
+                ...(endDate && { $lte: endDate }),
             }
         }
 
-        const transaction = await this.model.find(whereParams)
+        const transaction = await this.model.find(whereParams, undefined, {
+            sort: {
+                date: 1
+            }
+        })
 
         const transactionsMap = transaction.map((item) => item.toObject<Transaction>())
 
         return transactionsMap
 
     }
+
+    async getBalance({ beginDate, endDate }: getDashboardDTO): Promise<Balance> {
+
+        const aggregate = this.model.aggregate<Balance>()
+
+        if (beginDate || endDate) {
+            aggregate.match({
+                date: {
+                    ...(beginDate && { $gte: beginDate }),
+                    ...(endDate && { $lte: endDate }),
+                }
+            })
+        }
+
+        const [result] = await aggregate.project({
+            _id: 0,
+            income: {
+                $cond: [
+                    {
+                        $eq: ["$type", "income"],
+                    },
+                    "$amount",
+                    0,
+                ],
+            },
+            expense: {
+                $cond: [
+                    {
+                        $eq: ["$type", "expense"],
+                    },
+                    "$amount",
+                    0,
+                ],
+            },
+        }).group({
+            _id: null,
+            incomes: {
+                $sum: "$income",
+            },
+            expenses: {
+                $sum: "$expense",
+            }
+        }).addFields({
+            balance: {
+                $subtract: ["$incomes", "$expenses"],
+            }
+        })
+
+        return result
+    }
 }
+
