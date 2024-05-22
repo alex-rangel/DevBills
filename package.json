@@ -4,7 +4,10 @@
   "description": "Devbills API - Controle a sua vida financeira pessoal de forma rapida e fácil",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch ./src/server.ts"
+    "dev": "tsx watch ./src/server.ts",
+    "build": "tsc",
+    "start": "node ./build/src/server.js"
+    
   },
   "keywords": [],
   "author": {
@@ -20,6 +23,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status-codes": "^2.3.0",
