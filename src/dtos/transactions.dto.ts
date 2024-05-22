@@ -30,3 +30,10 @@ export const getDashboardShema = {
 
 const getDashboardObject = z.object(getDashboardShema);
 export type getDashboardDTO = z.infer<typeof getDashboardObject>
+
+export const getFinacialEvolutionSchma = {
+    year: z.string()
+};
+
+const getFinancialEvolutionObject = z.object(getFinacialEvolutionSchma);
+export type getFinancialEvolutionDTO = z.infer<typeof getFinancialEvolutionObject>
