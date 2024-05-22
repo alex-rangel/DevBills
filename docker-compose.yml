@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mongo:
-    container_name: mongodb
+    container_name: mongo-devbills
     restart: always
     image: mongo
     environment:

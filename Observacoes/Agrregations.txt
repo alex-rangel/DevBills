@@ -1,0 +1,68 @@
+--Aggregation do mondodb--
+
+É usado para poder fazer filtros dentro do bando de dados no mongo db
+-------------------------------------
+
+* Para realizar um filtro *
+
+Stage: $match
+
+{
+	date: {
+		$gte: new Date("2024-05-01"),
+		$lte: new Date("2024-05-31"),
+	}
+}
+----------------------------------------------
+
+*Para remodelar o documento do jeito que se quer*
+
+Stage: $project
+
+{
+	_id: 0,
+	income: {
+	   $cond: [
+	      {
+	         $eq: ["$type", "income"]
+	      },
+	      "$amount",
+	      0
+	   ]
+	},
+	expense: {
+	   $cond: [ 
+	      {
+	         $eq: ["$type", "expense"]
+	      },
+	      "$amount",
+	      0
+	  ]
+	}	
+}
+--------------------------------------------
+
+*Para agrupar as informações*
+
+Stage: $group
+
+{
+   _id: null,
+   incomes: {
+      $sum: "$income"
+   },
+   expense: {
+      $sum: "$expense"
+   }
+}
+-----------------------------------------------
+
+*Para poder adicionar um novo campo*
+
+Stage: $set
+
+{
+   balance: {
+      $subtract: ["$incomes", "$expenses"]
+   }
+}
