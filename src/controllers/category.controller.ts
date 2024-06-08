@@ -17,6 +17,7 @@ export class CategoriesControllers {
         try {
 
             const { title, color } = req.body;
+            console.log('bateu aki')
 
             const result = await this.categoriesService.create({ title, color })
 

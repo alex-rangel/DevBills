@@ -7,6 +7,8 @@ export class CategoryRepository {
     async  create({title,color}: Category): Promise<Category> {
         const createdCategory = await this.model.create({ title, color });
 
+        console.log(createdCategory)
+
         return createdCategory.toObject<Category>()
     }
 

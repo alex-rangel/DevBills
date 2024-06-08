@@ -12,6 +12,7 @@ setupMongo().then(() => {
     app.use(cors({
         origin: process.env.FRONT_URL,
     }))
+    //console.log(process.env.FRONT_URL)
     app.use(json())
     app.use(routes)
     app.use(errorHandler)
